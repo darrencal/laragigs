@@ -6,9 +6,7 @@
     </a>
     <div class="mx-4">
         <x-card class="p-10">
-            <div
-                class="flex flex-col items-center justify-center text-center"
-            >
+            <div class="flex flex-col items-center justify-center text-center">
                 <img
                     class="w-48 mr-6 mb-6"
                     src="{{ $listing->logo ? asset('storage/' . $listing->logo) : asset('images/no-image.png') }}"
@@ -50,7 +48,8 @@
             </div>
         </x-card>
 
-        <x-card class="mt-4 p-2 flex space-x-6">
+        @if ($listing->user_id === auth()->id())            
+        <x-card class="mt-4 p-2 flex justify-center space-x-6">
             <a href="/listings/{{ $listing->id }}/edit">
                 <i class="fa-solid fa-pencil"></i> Edit
             </a>
@@ -63,5 +62,6 @@
                 </button>
             </form>
         </x-card>
+        @endif
     </div>
 </x-layout>

@@ -16,15 +16,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [ListingController::class, 'index']);
-Route::get('/listings/create', [ListingController::class, 'create']);
-Route::post('/listings', [ListingController::class, 'store']);
-Route::get('/listings/{listing}/edit', [ListingController::class, 'edit']);
-Route::put('/listings/{listing}', [ListingController::class, 'update']);
-Route::delete('/listings/{listing}', [ListingController::class, 'destroy']);
+
+// Routes for authenticated users only
+Route::middleware(['auth'])->group(function() {
+    Route::get('/listings/create', [ListingController::class, 'create']);
+    Route::post('/listings', [ListingController::class, 'store']);
+    Route::get('/listings/{listing}/edit', [ListingController::class, 'edit']);
+    Route::put('/listings/{listing}', [ListingController::class, 'update']);
+    Route::delete('/listings/{listing}', [ListingController::class, 'destroy']);
+    Route::get('/listings/manage', [ListingController::class, 'manage']);
+
+    Route::post('/logout', [UserController::class, 'logout']);
+});
+
 Route::get('/listings/{listing}', [ListingController::class, 'show']);
 
-Route::get('/register', [UserController::class, 'register']);
+// Routes for guests only
+Route::middleware(['guest'])->group(function() {
+    Route::get('/register', [UserController::class, 'register']);
+    Route::get('/login', [UserController::class, 'login'])->name('login');
+});
+
 Route::post('/users', [UserController::class, 'store']);
-Route::post('/logout', [UserController::class, 'logout']);
-Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('users/authenticate', [UserController::class, 'authenticate']);
